@@ -1,11 +1,11 @@
 
-const products = [
+const products : { id: number, name: string, href: string, imageAlt: string, imageSrc: string, price: string, color: string}[] = [
   {
     id: 1,
     name: 'Basic Tee',
     href: '#',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
+    imageAlt: "Front of men's Basic Tee in black.11",
     price: '$35',
     color: 'Black',
   },
@@ -14,7 +14,7 @@ const products = [
     name: 'Basic Tee',
     href: '#',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
+    imageAlt: "Front of men's Basic Tee in black.22",
     price: '$35',
     color: 'Black',
   },
@@ -23,7 +23,7 @@ const products = [
     name: 'Basic Tee',
     href: '#',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
+    imageAlt: "Front of men's Basic Tee in black.1333",
     price: '$35',
     color: 'Black',
   },
@@ -32,19 +32,10 @@ const products = [
     name: 'Basic Tee',
     href: '#',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
+    imageAlt: "Front of men's Basic Tee in black.555",
     price: '$35',
     color: 'Black',
-  },
-  ,
-   { name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  // More products...
+  }
 ]
 export default function Example() {
   return (
