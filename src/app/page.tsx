@@ -5,8 +5,8 @@ import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
-  { name: 'Product', href: 'sankar/product' },
-  { name: 'Features', href: 'sankar/features' },
+  { name: 'Product', href: './product' },
+  { name: 'Features', href: './features' },
   { name: 'Marketplace', href: '#' },
   { name: 'Company', href: '#' },
 ]
@@ -127,8 +127,7 @@ export default function Example() {
               Data to enrich Shankar  online business
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-              fugiat veniam occaecat fugiat aliqua.
+            Biryani is not just a dish; it’s a celebration on a plate. As we embark on this gastronomic journey, let’s explore the world of Biryani through captivating captions that capture the essence of each aromatic bite.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
