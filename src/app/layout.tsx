@@ -3,7 +3,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import "./globals.css";
-import Image from 'next/image';
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Inter } from "next/font/google";
@@ -33,8 +32,6 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <div className="h-full bg-gradient-to-b from-indigo-950 to-white via-indigo-300">
             <Header />
-            {/* <Image src='/images/NeelamBanner.jpg' width={500}
-              height={300} alt="Banner" /> */}
             {children}
           </div>
         </NextIntlClientProvider>
