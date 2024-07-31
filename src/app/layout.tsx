@@ -13,7 +13,9 @@ import Header from '../common/Header';
 const inter = Inter({ subsets: ["latin"] });
 
 
-
+export function generateStaticParams () {
+  return [];
+}
 export default async function RootLayout({
   children,
 }: Readonly<{
