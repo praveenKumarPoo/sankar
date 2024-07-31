@@ -3,8 +3,10 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import "./globals.css";
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import {unstable_setRequestLocale} from 'next-intl/server';
+
+const locales = ['en', 'pt'];
+
 import { Inter } from "next/font/google";
 import Header from '../common/Header';
 
@@ -13,8 +15,8 @@ import Header from '../common/Header';
 const inter = Inter({ subsets: ["latin"] });
 
 
-export function generateStaticParams () {
-  return [];
+export function generateStaticParams() {
+  return locales.map((locale) => ({locale}));
 }
 export default async function RootLayout({
   children,
@@ -25,6 +27,9 @@ export default async function RootLayout({
   const locale = await getLocale();
   // Providing all messages to the client
   // side is the easiest way to get started
+
+  unstable_setRequestLocale(locale);
+  
   const messages = await getMessages();
 
   //const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
