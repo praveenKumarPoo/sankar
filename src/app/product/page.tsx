@@ -39,9 +39,9 @@ const products : { id: number, name: string, href: string, imageAlt: string, ima
 ]
 export default function Example() {
   return (
-    <div className="overflow-hidden bg-white py-24 sm:py-32">
+    <div className="overflow-hidde">
 
-      <div className="bg-white">
+      <div className="bg-gradient-to-b from-indigo-950 to-white via-indigo-30">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Customers also purchased</h2>
 

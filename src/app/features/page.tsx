@@ -1,51 +1,121 @@
-export default function Example() {
-  return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-          <svg
-            viewBox="0 0 1024 1024"
-            aria-hidden="true"
-            className="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-0"
-          >
-            <circle r={512} cx={512} cy={512} fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fillOpacity="0.7" />
-            <defs>
-              <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
-                <stop stopColor="#7775D6" />
-                <stop offset={1} stopColor="#E935C1" />
-              </radialGradient>
-            </defs>
-          </svg>
-          <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Boost your productivity.
-              <br />
-              Start using our app today.
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-300">
-              Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-              <a
-                href="#"
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
-                Get started
-              </a>
-              <a href="#" className="text-sm font-semibold leading-6 text-white">
-                Learn more <span aria-hidden="true">→</span>
-              </a>
-            </div>
-          </div>
-          <div className="relative mt-16 h-80 lg:mt-8">
-            <ul className="text-3xl font-bold tracking-tight text-white">
-              <li>briyani type 1</li>
-              <li>briyani type 2</li>
-              <li>briyani type 3</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+'use client'
+require("babel-polyfill");
+import React, { useState, useEffect } from 'react'
+import Table, { AvatarCell, SelectColumnFilter, StatusPill } from '../../common/Table'  // new
+import { formatDistance, differenceInDays, add, getUnixTime, isValid, format } from "date-fns";
+
+const modelData = (mData: {}[]) => {
+  return mData.map((row: { [key: string]: any }) => {
+    let newObject: { [key: string]: any } = {};
+    Object.keys(row).map((rowColumn: string) => {
+      const newColumn = rowColumn.replaceAll(" ", "").toLowerCase();
+      newObject[newColumn] = row[rowColumn];
+    })
+    return newObject;
+  })
 }
+
+
+
+function App() {
+
+  const [data, setData] = useState<{ [key: string]: any }>([]);
+  const getData = async () => {
+    let baseUrl = `https://chipper-toffee-e75e3f.netlify.app/.netlify/functions/api`;
+    await fetch(`${baseUrl}/list`).then((response) => response.json()).then((data) => {
+      console.log(data);
+      let CloneData = [...data];
+      let updateRegNo = 0;
+      let notpaidCustomer = [];
+      let inactiveCustomer = []
+      CloneData.map((row, index) => {
+        updateRegNo = Math.max(updateRegNo, row["Reg No:"] || 0)
+        let date1 = new Date(row["DUE DATE"])
+        if (!row["DUE DATE"]) {
+          row["DUE DATE"] = add(new Date(row["lastUpdateDateTime"]), {
+            months: row["Fees Options"]
+          }).valueOf();
+          date1 = new Date(row["DUE DATE"])
+        }
+        const date2 = new Date();
+        const daysDiff = differenceInDays(
+          new Date(date1),
+          new Date(date2)
+        )
+        const rowColor = isNaN(daysDiff) || daysDiff < -90 ? "#f0f0b7" : (daysDiff >= -90 && daysDiff <= 0) ? "#f47979" : "#2afc0094";
+        //const rowColor = isNaN(date2 - date1) || (date2 - date1 > 0 && diffDays > 90) ? "#f0f0b7" : (date2 - date1) > 0 ? "#f47979" : "#2afc0094";
+        CloneData[index] = {
+          ...CloneData[index],
+          expiredDays: Math.abs(daysDiff),
+          rowColor,
+          inValidList: rowColor === "#f0f0b7",
+          FeedueDate: row["DUE DATE"] ? format(new Date(row["DUE DATE"]), 'dd/MM/yyyy') : ""
+        }
+        if (rowColor === "#f47979") {
+          notpaidCustomer.push(CloneData[index]);
+        };
+        if (rowColor === "#f0f0b7") {
+          inactiveCustomer.push(CloneData[index]);
+        };
+      });
+      let overAllData = [...CloneData];
+      CloneData = CloneData.filter(({ inValidList }) => !inValidList);
+      console.log(CloneData.sort((a, b) => a["Reg No:"] - b["Reg No:"]))
+      setData(modelData(CloneData));
+    });
+  }
+  useEffect(() => {
+    getData();
+  }, [])
+  const columns = React.useMemo(() => {
+    return ["regno:", "name", "phonenumber", "feeduedate"].map((columnName) => {
+      return {
+        Header: columnName,
+        accessor: columnName
+      }
+    })
+  }, []);
+  console.log(columns)
+  // const columns1 = React.useMemo(() => [
+  //   {
+  //     Header: "Name",
+  //     accessor: 'name',
+  //     Cell: AvatarCell,
+  //     imgAccessor: "imgUrl",
+  //     emailAccessor: "email",
+  //   },
+  //   {
+  //     Header: "Title",
+  //     accessor: 'title',
+  //   },
+  //   {
+  //     Header: "Status",
+  //     accessor: 'status',
+  //     Cell: StatusPill,
+  //   },
+  //   {
+  //     Header: "Age",
+  //     accessor: 'age',
+  //   },
+  //   {
+  //     Header: "Role",
+  //     accessor: 'role',
+  //     Filter: SelectColumnFilter,  // new
+  //     filter: 'includes',
+  //   },
+  // ], [])
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-indigo-950 to-white via-indigo-300 text-gray-900 top-0.5">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        {/* <div className="h-10">
+        </div> */}
+        <div className="mt-6">
+          <Table columns={columns} data={data} />
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default App;
