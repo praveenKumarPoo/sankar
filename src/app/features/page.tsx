@@ -108,8 +108,6 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-950 to-white via-indigo-300 text-gray-900 top-0.5">
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        {/* <div className="h-10">
-        </div> */}
         <div className="mt-6">
           <Table columns={columns} data={data} />
         </div>
