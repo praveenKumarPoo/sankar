@@ -61,6 +61,8 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
+            description: 'Optional static site generator to attempt to configure: "nuxt", "next", "gatsby", or "sveltekit"'
+            required: false
       - name: Restore cache
         uses: actions/cache@v4
         with:
